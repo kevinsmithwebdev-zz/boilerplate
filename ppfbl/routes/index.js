@@ -8,8 +8,10 @@ var User = require('../models/user');
 
 router.get('/',
   function(req, res) {
-
-    res.render('home', { user: req.user });
+    if (res.locals.globalUser && res.locals.globalUser.name)
+      res.render('home', { user: req.user });
+    else
+      res.redirect('/auth/login');
   });
 
 

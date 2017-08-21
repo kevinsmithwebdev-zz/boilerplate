@@ -12,16 +12,15 @@
         <ul class="nav nav-pills pull-right">
           {{#if user}}
             <li role="presentation"><a href="/">Dashboard</a></li>
-            <li role="presentation"><a href="/users/logout">Logout</a></li>
+            <li role="presentation"><a href="/auth/logout">Logout</a></li>
           {{else}}
-            <li role="presentation"><a href="/users/login">Login</a></li>
-            <li role="presentation"><a href="/users/register">Register</a></li>
+            <li role="presentation"><a href="/auth/login">Login</a></li>
           {{/if}}
         </ul>
       </nav>
       <h3>{{{appInfo.title}}}
       {{#if user}}
-        - Welcome {{user.name}}
+        - Welcome {{globalUser.name}}
       {{else}}
         - not logged in
       {{/if}}
@@ -43,6 +42,7 @@
         {{{body}}}
       </div>
 
+
     </div> <!-- /row  alerts -->
 
     <footer class="footer">{{{appInfo.footer}}}</footer>
@@ -50,3 +50,8 @@
   </div> <!-- /container -->
 </body>
 </html>
+
+
+<script type="text/javascript">
+
+</script>

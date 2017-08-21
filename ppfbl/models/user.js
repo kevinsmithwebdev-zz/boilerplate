@@ -3,11 +3,14 @@ var mongoose = require("mongoose");
 var passportLocalMongoose = require('passport-local-mongoose');
 
 var UserSchema = mongoose.Schema({
-      strategy:     { type: String },
-      username:     { type: String }, // for local only
-      password:     { type: String },
-      name:         { type: String },
-      facebookID:   { type: Number }  // for Facebook only
+      strategy:       { type: String },
+      name:           { type: String },
+
+      localUsername:  { type: String },
+      localPassword:  { type: String },
+      localEmail:     { type: String },
+
+      facebookID:     { type: Number }
 });
 
 UserSchema.plugin(passportLocalMongoose);

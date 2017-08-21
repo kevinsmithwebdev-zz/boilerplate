@@ -2,6 +2,7 @@ var dotenv = require('dotenv').config();
 var path = require('path');
 var express = require('express');
 var exphbs = require('express-handlebars');
+var exphbsHelpers = require('./lib/helpers');
 var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
 var flash = require('connect-flash');
@@ -42,8 +43,9 @@ app.use(function(req, res, next) {
   res.locals.appInfo = {
       title: process.env.TITLE,
       titleLong: process.env.TITLE_LONG,
-      footer: process.env.FOOTER },
-  res.locals.user = req.user || null;
+      footer: process.env.FOOTER
+    };
+  res.locals.globalUser = req.session.user;
   next();
 });
 
@@ -91,10 +93,10 @@ app.set('view engine', '.hbs');
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
 
-// app.use(require('morgan')('combined'));
+app.use(require('morgan')('tiny'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(require('express-session')({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true }));
 
 // Initialize Passport and restore authentication state, if any, from the
 // session.
@@ -110,4 +112,4 @@ app.use('/auth', auth);
 // public dir
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(process.env.PORT, function() { console.log('\n\nServer started on port ' + process.env.PORT + ' ...\n\n');} );
+app.listen(process.env.PORT, function() { console.log('\n\nServer for "' + process.env.TITLE + '" now listening on port ' + process.env.PORT + ' ...\n\n');} );

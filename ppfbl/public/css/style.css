@@ -27,6 +27,7 @@ body {
 
 .header li a:hover {
   color: #0047AB;
+  background-color: #EEE;
 }
 
 /* Make the masthead heading the same height as the navigation */
@@ -122,5 +123,10 @@ nav {
 
 footer {
   margin-top: 40px;
+  text-align: center;
+}
+
+.center {
+  margin: 0 auto;
   text-align: center;
 }

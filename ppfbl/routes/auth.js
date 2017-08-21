@@ -4,47 +4,53 @@ var router = express.Router();
 
 var User = require('../models/user');
 
-router.get('/',
+router.get('/login',
   function(req, res){
     res.render('login');
 });
 
+router.get('/logout',
+  function(req, res){
+    req.logout();
+    req.session.user = {};
+    res.redirect('/');
+});
+
+
+
+
 router.get('/facebook',
   passport.authenticate('facebook'), function() {
-    console.log('here1');
   });
 
 
 
-router.get('/facebook/return',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
+router.get('/facebook/return', passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log('successful facebook login');
-    console.log(req.user);
-    User.count({ strategy: 'facebook', facebookID: +req.user.id }, function (err, count) {
+    var userObj = {};
+    User.find({ strategy: 'facebook', facebookID: +req.user.id }, function (err, userObj) {
       if (err) throw err;
-      console.log("count = " + count);
-      console.log("id = " + req.user.id);
-      if (count) {
-        console.log("You've logged in before ...");
+
+      if (userObj.length) {
+        userObj = userObj[0];
       } else {
-        console.log('You\'ve never logged in before ...');
-        var newUser = new User({
+        userObj = {
           strategy: 'facebook',
-          username: '',
-          password: '',
           name: req.user.displayName,
           facebookID: +req.user.id
-        });
+        };
+        var newUser = new User(userObj);
+
         User.facebookCreateUser(newUser, function(err, user) {
-          console.log('Callback of User.createUser');
+
         });
 
-      }
+      } // if (userObj.length) -> else
 
+      req.session.user = userObj;;
 
       res.redirect('/');
-    });
+    }); // User.find
   });
 
 //****************************************************
